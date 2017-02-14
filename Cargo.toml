@@ -1,0 +1,7 @@
+[package]
+name = "shiorust"
+version = "0.1.0"
+authors = ["Narazaka <info@narazaka.net>"]
+
+[dependencies]
+regex = "0.2"
