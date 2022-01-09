@@ -18,6 +18,7 @@ mod tests {
             request.get_header("Reference0").unwrap().as_str(),
             "foo\\nbar"
         );
+        assert_eq!(request.get_header("Reference0"), request.get_reference(0));
         assert_eq!(request.get_header("X-Ray").unwrap().as_str(), "y");
     }
 
@@ -34,6 +35,7 @@ mod tests {
             request.get_header("Reference0").unwrap().as_str(),
             "foo\\nbar"
         );
+        assert_eq!(request.get_header("Reference0"), request.get_reference(0));
         assert_eq!(request.get_header("X-Ray").unwrap().as_str(), "y");
     }
 }
@@ -56,7 +58,7 @@ impl std::str::FromStr for HeaderName {
             return Ok(HeaderName::Standard(header));
         }
         if s.get(..9) == Some("Reference") {
-            if let Ok(index) = u8::from_str(s) {
+            if let Ok(index) = u8::from_str(&s[9..]) {
                 return Ok(HeaderName::Reference(index));
             }
         }
@@ -375,11 +377,11 @@ impl Parser<Response, (Version, Status)> for Response {
     }
 }
 
-trait GetHeader<T> {
+pub trait GetHeader<T> {
     fn get_header(&self, name: T) -> Option<&String>;
 }
 
-trait SetHeader<T> {
+pub trait SetHeader<T> {
     fn set_header(&mut self, name: T, value: String) -> Option<String>;
 }
 
@@ -428,5 +430,31 @@ impl GetHeader<&HeaderName> for Response {
 impl SetHeader<HeaderName> for Response {
     fn set_header(&mut self, name: HeaderName, value: String) -> Option<String> {
         self.headers.insert(name, value)
+    }
+}
+
+pub trait GetReference {
+    fn get_reference(&self, index: u8) -> Option<&String>;
+}
+
+pub trait SetReference {
+    fn set_reference(&mut self, index: u8, value: String) -> Option<String>;
+}
+
+impl<T> GetReference for T
+where
+    for<'a> T: GetHeader<&'a HeaderName>,
+{
+    fn get_reference(&self, index: u8) -> Option<&String> {
+        self.get_header(&HeaderName::Reference(index))
+    }
+}
+
+impl<T> SetReference for T
+where
+    T: SetHeader<HeaderName>,
+{
+    fn set_reference(&mut self, index: u8, value: String) -> Option<String> {
+        self.set_header(HeaderName::Reference(index), value)
     }
 }
