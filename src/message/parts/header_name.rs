@@ -2,10 +2,31 @@ mod standard_header_name;
 pub use standard_header_name::StandardHeaderName;
 use std::str::FromStr;
 
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_header_name() {
+        assert_eq!(HeaderName::from("Charset").to_string(), "Charset");
+        assert_eq!(
+            HeaderName::from("Charset"),
+            HeaderName::Standard(StandardHeaderName::Charset)
+        );
+        assert_eq!(HeaderName::from("Reference11").to_string(), "Reference11");
+        assert_eq!(HeaderName::from("Reference11"), HeaderName::Reference(11));
+        assert_eq!(HeaderName::from("X-Foo").to_string(), "X-Foo");
+        assert_eq!(
+            HeaderName::from("X-Foo"),
+            HeaderName::Custom("X-Foo".to_string())
+        );
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Hash)]
 pub enum HeaderName {
     Standard(StandardHeaderName),
-    Reference(u8),
+    Reference(u16),
     Custom(String),
 }
 
@@ -20,7 +41,7 @@ impl std::str::FromStr for HeaderName {
             return Ok(HeaderName::Standard(header));
         }
         if s.get(..9) == Some("Reference") {
-            if let Ok(index) = u8::from_str(&s[9..]) {
+            if let Ok(index) = u16::from_str(&s[9..]) {
                 return Ok(HeaderName::Reference(index));
             }
         }

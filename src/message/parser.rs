@@ -103,6 +103,6 @@ impl Headers {
             let value = &header_line[index + 2..];
             headers.insert(HeaderName::from(key), value.to_string());
         }
-        Ok(Headers::new(headers))
+        Ok(Headers::from_hashmap(headers))
     }
 }

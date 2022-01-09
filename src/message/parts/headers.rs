@@ -2,21 +2,41 @@ use super::header_name::HeaderName;
 use crate::common::CRLF;
 use std::collections::HashMap;
 
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_header_name() {
+        let mut h = Headers::new();
+        h.insert_by_header_name(HeaderName::Reference(0), "foo".to_string());
+        assert_eq!(
+            h.get_by_header_name(&HeaderName::Reference(0)),
+            Some(&"foo".to_string())
+        );
+    }
+}
+
 #[derive(Debug)]
 pub struct Headers {
     headers: HashMap<HeaderName, String>,
 }
 
 impl Headers {
-    pub fn new(headers: HashMap<HeaderName, String>) -> Headers {
+    pub fn new() -> Headers {
+        Headers {
+            headers: HashMap::new(),
+        }
+    }
+    pub fn from_hashmap(headers: HashMap<HeaderName, String>) -> Headers {
         Headers { headers: headers }
     }
 
-    pub fn get(&self, name: &HeaderName) -> Option<&String> {
+    pub fn get_by_header_name(&self, name: &HeaderName) -> Option<&String> {
         self.headers.get(name)
     }
 
-    pub fn insert(&mut self, name: HeaderName, value: String) -> Option<String> {
+    pub fn insert_by_header_name(&mut self, name: HeaderName, value: String) -> Option<String> {
         self.headers.insert(name, value)
     }
 }
