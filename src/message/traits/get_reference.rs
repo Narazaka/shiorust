@@ -1,4 +1,4 @@
-use super::GetHeader;
+use super::super::parts::Headers;
 use crate::message::parts::HeaderName;
 
 pub trait GetReference {
@@ -6,11 +6,8 @@ pub trait GetReference {
     fn get_reference(&self, index: u16) -> Option<&String>;
 }
 
-impl<T> GetReference for T
-where
-    for<'a> T: GetHeader<&'a HeaderName>,
-{
+impl GetReference for Headers {
     fn get_reference(&self, index: u16) -> Option<&String> {
-        self.get_header(&HeaderName::Reference(index))
+        self.get_by_header_name(&HeaderName::Reference(index))
     }
 }

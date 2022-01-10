@@ -1,4 +1,4 @@
-use super::SetHeader;
+use super::super::parts::Headers;
 use crate::message::parts::HeaderName;
 
 pub trait SetReference {
@@ -6,11 +6,8 @@ pub trait SetReference {
     fn set_reference(&mut self, index: u16, value: String) -> Option<String>;
 }
 
-impl<T> SetReference for T
-where
-    T: SetHeader<HeaderName>,
-{
+impl SetReference for Headers {
     fn set_reference(&mut self, index: u16, value: String) -> Option<String> {
-        self.set_header(HeaderName::Reference(index), value)
+        self.insert_by_header_name(HeaderName::Reference(index), value)
     }
 }
