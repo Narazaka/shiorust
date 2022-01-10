@@ -1,13 +1,67 @@
-#[derive(
-    Debug,
-    PartialEq,
-    Eq,
-    Hash,
-    strum_macros::EnumString,
-    strum_macros::Display,
-    strum_macros::IntoStaticStr,
-)]
-pub enum StandardHeaderName {
+use super::super::HeaderName;
+use super::super::Headers;
+use paste::paste;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_headers() {
+        let mut h = Headers::new();
+        h.insert_by_header_name(Sender, "foo".to_string());
+        assert_eq!(h.get_by_header_name(&Sender), Some(&"foo".to_string()));
+        assert_eq!(h.get_sender(), Some(&"foo".to_string()));
+    }
+}
+
+macro_rules! standard_header_names {
+    (
+        $(
+            $(#[$docs:meta])*
+            $konst:ident,
+        )+
+    ) => {
+        #[derive(
+            Debug,
+            PartialEq,
+            Eq,
+            Hash,
+            strum_macros::EnumString,
+            strum_macros::Display,
+            strum_macros::IntoStaticStr,
+        )]
+        pub enum StandardHeaderName {
+            $(
+                $konst,
+            )+
+        }
+
+        paste! {
+            $(
+                #[allow(non_upper_case_globals)]
+                $(#[$docs])*
+                pub const $konst: HeaderName = HeaderName::Standard(StandardHeaderName::$konst);
+            )+
+
+            impl Headers {
+                $(
+                    // $(#[$docs])*
+                    pub fn [<get_ $konst:snake:lower>](&self) -> Option<&String> {
+                        self.get_by_header_name(&HeaderName::Standard(StandardHeaderName::$konst))
+                    }
+
+                    $(#[$docs])*
+                    pub fn [<set_ $konst:snake:lower>](&mut self, value: String) -> Option<String> {
+                        self.insert_by_header_name(HeaderName::Standard(StandardHeaderName::$konst), value)
+                    }
+                )+
+            }
+        }
+    }
+}
+
+standard_header_names! {
     /// Sender header
     Sender,
     /// Charset header

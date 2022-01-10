@@ -1,4 +1,4 @@
-mod standard_header_name;
+pub mod standard_header_name;
 pub use standard_header_name::StandardHeaderName;
 use std::str::FromStr;
 
