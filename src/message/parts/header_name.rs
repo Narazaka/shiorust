@@ -23,10 +23,14 @@ mod test {
     }
 }
 
+/// SHIORI header name
 #[derive(Debug, PartialEq, Eq, Hash)]
 pub enum HeaderName {
+    /// standard headers
     Standard(StandardHeaderName),
+    /// Reference* header
     Reference(u16),
+    /// other headers
     Custom(String),
 }
 

@@ -18,6 +18,7 @@ pub enum ParseErrorKind {
     HeaderLine,
 }
 
+/// parser
 pub trait Parser<T, U> {
     fn parse(payload: &str) -> Result<T, ParseError>;
 

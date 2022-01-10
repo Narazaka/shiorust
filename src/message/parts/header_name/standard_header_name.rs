@@ -22,6 +22,7 @@ macro_rules! standard_header_names {
             $konst:ident,
         )+
     ) => {
+        /// SHIORI/2.x, 3.0 standard header names
         #[derive(
             Debug,
             PartialEq,
@@ -33,6 +34,7 @@ macro_rules! standard_header_names {
         )]
         pub enum StandardHeaderName {
             $(
+                $(#[$docs])*
                 $konst,
             )+
         }
@@ -46,7 +48,7 @@ macro_rules! standard_header_names {
 
             impl Headers {
                 $(
-                    // $(#[$docs])*
+                    $(#[$docs])*
                     pub fn [<get_ $konst:snake:lower>](&self) -> Option<&String> {
                         self.get_by_header_name(&HeaderName::Standard(StandardHeaderName::$konst))
                     }

@@ -25,6 +25,7 @@ mod test {
     }
 }
 
+/// SHIORI Response message headers
 #[derive(Debug)]
 pub struct Headers(HashMap<HeaderName, String>);
 

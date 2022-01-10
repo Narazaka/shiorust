@@ -1,3 +1,4 @@
+/// SHIORI Response message status
 #[derive(
     Debug,
     PartialEq,

@@ -1,6 +1,7 @@
 use super::parts::{Headers, Status, Version};
 use crate::common::CRLF;
 
+/// SHIORI Response message
 #[derive(Debug)]
 pub struct Response {
     pub version: Version,

@@ -21,6 +21,7 @@ mod test {
 }
 
 pub trait Insert<T> {
+    /// set header
     fn insert(&mut self, name: T, value: String) -> Option<String>;
 }
 

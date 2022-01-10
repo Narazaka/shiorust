@@ -14,6 +14,7 @@ mod test {
 }
 
 pub trait Get<T> {
+    /// get header
     fn get(&self, name: T) -> Option<&String>;
 }
 

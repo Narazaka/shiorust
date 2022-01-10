@@ -1,3 +1,4 @@
+/// SHIORI Request message method
 #[derive(
     Debug,
     PartialEq,

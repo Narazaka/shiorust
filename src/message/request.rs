@@ -1,6 +1,7 @@
 use super::parts::{Headers, Method, Version};
 use crate::common::CRLF;
 
+/// SHIORI Request message
 #[derive(Debug)]
 pub struct Request {
     pub method: Method,

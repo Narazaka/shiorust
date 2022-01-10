@@ -1,3 +1,4 @@
+/// SHIORI message version
 #[derive(
     Debug,
     PartialEq,

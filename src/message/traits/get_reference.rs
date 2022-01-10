@@ -2,6 +2,7 @@ use super::GetHeader;
 use crate::message::parts::HeaderName;
 
 pub trait GetReference {
+    /// Reference* header
     fn get_reference(&self, index: u16) -> Option<&String>;
 }
 
